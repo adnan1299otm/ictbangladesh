@@ -18,8 +18,8 @@ export const generateAIResponse = async (
 ): Promise<AIResponse> => {
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
-  // Use gemini-1.5-flash for high-quality responses and speed
-  const modelName = 'gemini-1.5-flash';
+  // Use gemini-2.5-flash for high-quality responses and speed
+  const modelName = 'gemini-2.5-flash';
 
   const config: any = {
     systemInstruction,
@@ -73,7 +73,7 @@ export const transcribeAudio = async (base64Audio: string, mimeType: string): Pr
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       contents: {
         parts: [
           { inlineData: { data: base64Audio, mimeType } },
@@ -94,7 +94,7 @@ export const generateSpeech = async (text: string): Promise<string | undefined> 
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-tts",
+      model: "gemini-2.5-flash",
       contents: [{ parts: [{ text }] }],
       // config: { ... } // TTS configuration might need adjustment for specific models
     });
