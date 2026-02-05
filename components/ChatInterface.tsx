@@ -33,7 +33,7 @@ const renderContent = (content: string, isDark: boolean, isUser: boolean) => {
     const parts = line.split(/(\*\*.*?\*\*)/g);
     const processedLine = parts.map((part, partIndex) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        let boldColor = isUser ? 'text-white' : (isDark ? 'text-[#00ff66]' : 'text-green-600');
+        let boldColor = isUser ? (isDark ? 'text-white' : 'text-green-800') : (isDark ? 'text-[#00ff66]' : 'text-green-600');
         return (
           <strong key={`${lineIndex}-${partIndex}`} className={`font-black tracking-tight ${boldColor}`}>
             {part.slice(2, -2)}
@@ -44,11 +44,11 @@ const renderContent = (content: string, isDark: boolean, isUser: boolean) => {
     });
 
     if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
-      const dotColor = isUser ? 'bg-white' : (isDark ? 'bg-[#00ff66]' : 'bg-green-600');
+      const dotColor = isUser ? (isDark ? 'bg-white' : 'bg-green-700') : (isDark ? 'bg-[#00ff66]' : 'bg-green-600');
       return (
         <div key={lineIndex} className="flex items-start space-x-2 ml-1 my-1">
           <div className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${dotColor}`} />
-          <p className={`flex-1 leading-relaxed ${isUser ? 'text-white' : (isDark ? 'text-white' : 'text-zinc-900')}`}>
+          <p className={`flex-1 leading-relaxed ${isUser ? (isDark ? 'text-white' : 'text-green-900') : (isDark ? 'text-white' : 'text-zinc-900')}`}>
             {processedLine.map(p => (typeof p === 'string' ? p.replace(/^[-*]\s/, '') : p))}
           </p>
         </div>
@@ -56,7 +56,7 @@ const renderContent = (content: string, isDark: boolean, isUser: boolean) => {
     }
 
     return (
-      <p key={lineIndex} className={`${line.trim() === '' ? 'h-2' : 'mb-2'} leading-relaxed ${isUser ? 'text-white font-semibold' : (isDark ? 'text-white font-medium' : 'text-zinc-900 font-medium')}`}>
+      <p key={lineIndex} className={`${line.trim() === '' ? 'h-2' : 'mb-2'} leading-relaxed ${isUser ? (isDark ? 'text-white font-semibold' : 'text-green-900 font-semibold') : (isDark ? 'text-white font-medium' : 'text-zinc-900 font-medium')}`}>
         {processedLine}
       </p>
     );

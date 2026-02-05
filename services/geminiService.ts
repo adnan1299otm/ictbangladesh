@@ -69,9 +69,9 @@ export const generateAIResponse = async (
       return { text: "System Error: API Key is missing. Please configure VITE_GEMINI_API_KEY in your Vercel settings." };
     }
     if (imageData) {
-      return { text: "Sorry, I cannot analyze this image right now. Please try again later." };
+      return { text: "Details: " + error.message };
     }
-    return { text: "Sorry, I am unable to process your request at the moment. Please try again later or contact our support hotline." };
+    return { text: "Error: " + error.message + " (Please report this code)" };
   }
 };
 
