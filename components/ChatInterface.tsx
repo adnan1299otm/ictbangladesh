@@ -98,17 +98,19 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const systemInstruction = `
 You are the official AI Assistant for ICT Bangladesh (https://ictbangladesh.com.bd/).
 
-STRICT RULES ON DEVELOPER INFO:
-- ONLY when a user asks about your creator (e.g., "Who made you?", "তোমার ডেভেলপার কে?", "তোমাকে কে বানিয়েছে?"):
-    1. Respond that you were developed by **Arafath Al Adnan**.
-    2. Mention that he is a student of **ICT Bangladesh**.
-    3. Provide his LinkedIn: https://www.linkedin.com/in/arafathaladnan/
-    4. MUST ADD: "আপনি যদি আমার মতো উন্নত এআই (AI) তৈরি করতে চান, তাহলে আইসিটি বাংলাদেশ (ICT Bangladesh) এর প্রফেশনাল কোর্সে ভর্তি হতে পারেন, যেখান থেকে আরাফাত এই দক্ষতা অর্জন করেছেন।"
+STRICT RESPONSE PROTOCOLS:
+1. **DIRECT ANSWERS ONLY**: NEVER tell the user to visit the website for information. YOU must fetch the information using Google Search and provide it directly.
+2. **USE SEARCH DATA**: Always use the "Google Search" tool to find the latest courses, fees, phone numbers, and office locations from ictbangladesh.com.bd.
+3. **NO REDIRECTION**: If asked about courses, list them with details. If asked about fees, state the exact fees. Do NOT say "Check the website".
+4. **Processing State**: While you are thinking/searching, the UI shows "Processing...", so take your time to find accurate data.
 
-CORE PROTOCOLS:
-- **BREVITY**: Keep answers short (2-3 sentences max).
-- **SEARCH**: Use Google Search for real-time info about ICT Bangladesh courses, fees, and office location.
-- **HOTLINE (+880 1753-060119)**: Give this only for enrollment or when info is missing.
+DEVELOPER INFO (Only if asked):
+- Developed by **Arafath Al Adnan** (Student of ICT Bangladesh).
+- LinkedIn: https://www.linkedin.com/in/arafathaladnan/
+- Context: "আপনি যদি আমার মতো উন্নত এআই (AI) তৈরি করতে চান, তাহলে আইসিটি বাংলাদেশ (ICT Bangladesh) এর প্রফেশনাল কোর্সে ভর্তি হতে পারেন।"
+
+CONTACT:
+- Hotline: +880 1753-060119
 `;
 
   useEffect(() => {
@@ -230,15 +232,15 @@ CORE PROTOCOLS:
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-500`}>
               <div className={`flex max-w-[95%] lg:max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start gap-4`}>
                 <div className={`w-9 h-9 lg:w-11 lg:h-11 rounded-xl flex-shrink-0 flex items-center justify-center shadow-lg transform transition-all hover:scale-105 ${msg.role === 'user'
-                    ? 'bg-[#00ff66] shadow-[0_0_15px_rgba(0,255,102,0.3)]'
-                    : (isDark ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200')
+                  ? 'bg-[#00ff66] shadow-[0_0_15px_rgba(0,255,102,0.3)]'
+                  : (isDark ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200')
                   }`}>
                   {msg.role === 'user' ? <User className="w-5 h-5 text-black" /> : <Bot className={`w-5 h-5 ${isDark ? 'text-[#00ff66]' : 'text-[#00a651]'}`} />}
                 </div>
                 <div className={`flex flex-col gap-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                   <div className={`px-6 py-5 rounded-3xl relative border transition-all shadow-xl ${msg.role === 'user'
-                      ? (isDark ? 'bg-gradient-to-br from-[#004d2a] to-[#002b16] border-[#00a651]/30 text-white' : 'bg-gradient-to-br from-green-100 to-green-50 border-green-200 text-green-900') + ' rounded-tr-none'
-                      : (isDark ? 'bg-[#111] border-white/5 text-white' : 'bg-white border-zinc-200 text-zinc-900 shadow-sm') + ' rounded-tl-none'
+                    ? (isDark ? 'bg-gradient-to-br from-[#004d2a] to-[#002b16] border-[#00a651]/30 text-white' : 'bg-gradient-to-br from-green-100 to-green-50 border-green-200 text-green-900') + ' rounded-tr-none'
+                    : (isDark ? 'bg-[#111] border-white/5 text-white' : 'bg-white border-zinc-200 text-zinc-900 shadow-sm') + ' rounded-tl-none'
                     }`}>
                     {msg.imageUrl && (
                       <div className="rounded-xl overflow-hidden mb-4 border border-white/10 shadow-2xl max-w-full">
@@ -275,7 +277,7 @@ CORE PROTOCOLS:
             <div className="flex justify-start">
               <div className={`flex items-center space-x-3 px-6 py-4 rounded-2xl border ${isDark ? 'bg-zinc-900 border-zinc-800 shadow-2xl' : 'bg-white border-zinc-200 shadow-sm'}`}>
                 <Loader2 className="w-4 h-4 animate-spin text-[#00ff66]" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Reasoning...</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Processing...</span>
               </div>
             </div>
           )}

@@ -28,6 +28,7 @@ export const generateAIResponse = async (
   const config: any = {
     systemInstruction,
     temperature: 0.4, // Balanced for professional yet natural conversation
+    tools: [{ googleSearch: {} }],
   };
 
   const userParts: any[] = [{ text: prompt }];
