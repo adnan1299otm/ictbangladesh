@@ -174,6 +174,7 @@ Contact: +880 1753-060119
       const history = updatedMessages.slice(-8).map(msg => ({ role: msg.role === 'assistant' ? 'model' : 'user', parts: [{ text: msg.content }] }));
       const aiResult = await generateAIResponse(userQuery, history, systemInstruction, base64Image ? { data: base64Image, mimeType: imageMimeType } : undefined);
       const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: aiResult.text, timestamp: new Date(), sources: aiResult.sources };
+      console.log("Raw AI Response:", aiResult.text); // Debugging
       onUpdateMessages(currentSessionId, [...updatedMessages, assistantMessage]);
     } catch (err: any) {
       console.error(err);
@@ -371,7 +372,7 @@ Contact: +880 1753-060119
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2 text-zinc-600 opacity-60">
                 <Zap className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em]">GEMINI 3.0</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">GEMINI 1.5 PRO (v2.0)</span>
               </div>
             </div>
             <div className="flex items-center space-x-2 text-zinc-700 opacity-60">
