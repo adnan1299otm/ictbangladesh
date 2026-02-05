@@ -27,10 +27,10 @@ export default function Home() {
         if (savedSessions) {
             try {
                 const parsed = JSON.parse(savedSessions);
-                const revived = parsed.map((s: any) => ({
+                const revived = parsed.map((s: ChatSession) => ({
                     ...s,
                     lastUpdated: new Date(s.lastUpdated),
-                    messages: s.messages.map((m: any) => ({ ...m, timestamp: new Date(m.timestamp) }))
+                    messages: s.messages.map((m: Message) => ({ ...m, timestamp: new Date(m.timestamp) }))
                 }));
                 setSessions(revived);
             } catch (e) {
