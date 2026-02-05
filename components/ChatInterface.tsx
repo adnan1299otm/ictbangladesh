@@ -33,7 +33,7 @@ const renderContent = (content: string, isDark: boolean, isUser: boolean) => {
     const parts = line.split(/(\*\*.*?\*\*)/g);
     const processedLine = parts.map((part, partIndex) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        let boldColor = isUser ? 'text-white' : (isDark ? 'text-[#00ff66]' : 'text-blue-700');
+        let boldColor = isUser ? 'text-white' : (isDark ? 'text-[#00ff66]' : 'text-green-600');
         return (
           <strong key={`${lineIndex}-${partIndex}`} className={`font-black tracking-tight ${boldColor}`}>
             {part.slice(2, -2)}
@@ -44,7 +44,7 @@ const renderContent = (content: string, isDark: boolean, isUser: boolean) => {
     });
 
     if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
-      const dotColor = isUser ? 'bg-white' : (isDark ? 'bg-[#00ff66]' : 'bg-blue-600');
+      const dotColor = isUser ? 'bg-white' : (isDark ? 'bg-[#00ff66]' : 'bg-green-600');
       return (
         <div key={lineIndex} className="flex items-start space-x-2 ml-1 my-1">
           <div className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${dotColor}`} />
@@ -102,7 +102,7 @@ Core Identity
 - Name: ICT Bangladesh AI Assistant
 - Purpose: Help users with ICT Bangladesh information
 - Knowledge Source: Google Search (Fetch real-time info from https://ictbangladesh.com.bd/)
-- Language: Respond in the same language user uses (Bangla or English)
+- Language: **DEFAULT TO ENGLISH**. Only speak Bangla if the user explicitly speaks Bangla.
 
 Communication Style
 - Professional but friendly (Helpful tone)
