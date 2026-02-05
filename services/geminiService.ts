@@ -23,11 +23,12 @@ export const generateAIResponse = async (
   imageData?: { data: string; mimeType: string }
 ): Promise<AIResponse> => {
   // Use gemini-2.5-flash for high-quality responses and speed
-  const modelName = 'gemini-2.5-flash';
+  // Use gemini-1.5-pro for better instruction following and reasoning
+  const modelName = 'gemini-1.5-pro';
 
   const config: any = {
     systemInstruction,
-    temperature: 0.4, // Balanced for professional yet natural conversation
+    temperature: 0.3, // Lower temperature for more consistent formatting
     tools: [{ googleSearch: {} }],
   };
 
