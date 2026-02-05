@@ -74,13 +74,13 @@ interface ChatInterfaceProps {
   onUpdateMessages: (id: string, messages: Message[]) => void;
 }
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
+const ChatInterface: React.FC<ChatInterfaceProps> = ({
   theme, sessions, currentSessionId, config, onSelectSession, onNewChat, onDeleteSession, onUpdateMessages
 }) => {
   const isDark = theme === Theme.DARK;
   const currentSession = sessions.find(s => s.id === currentSessionId);
   const messages = currentSession?.messages || [];
-  
+
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
@@ -88,7 +88,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [isRecording, setIsRecording] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageMimeType, setImageMimeType] = useState<string>('');
-  
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -138,8 +138,16 @@ CORE PROTOCOLS:
       const aiResult = await generateAIResponse(userQuery, history, systemInstruction, base64Image ? { data: base64Image, mimeType: imageMimeType } : undefined);
       const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: aiResult.text, timestamp: new Date(), sources: aiResult.sources };
       onUpdateMessages(currentSessionId, [...updatedMessages, assistantMessage]);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      alert("Error: " + (err.message || "Something went wrong"));
+      // Add a visual error message to chat if needed
+      onUpdateMessages(currentSessionId, [...updatedMessages, {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: "⚠️ Error detected: " + (err.message || "Check console for details."),
+        timestamp: new Date()
+      }]);
     } finally {
       setIsLoading(false);
     }
@@ -175,7 +183,7 @@ CORE PROTOCOLS:
 
   return (
     <div className={`flex h-[88vh] md:h-[78vh] w-full max-w-7xl mx-auto rounded-3xl overflow-hidden border transition-all duration-500 relative ${isDark ? 'bg-[#0a0a0a] border-zinc-900 shadow-2xl' : 'bg-white border-zinc-200 shadow-xl'}`}>
-      
+
       <div className={`absolute lg:relative inset-y-0 left-0 z-50 transition-all duration-500 border-r overflow-hidden flex flex-col ${isSidebarOpen ? 'w-[280px] translate-x-0' : '-translate-x-full lg:translate-x-0 lg:w-0'} ${isDark ? 'border-white/5 bg-[#0a0a0a]' : 'border-zinc-200 bg-zinc-50'}`}>
         <div className="p-6 flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -184,12 +192,12 @@ CORE PROTOCOLS:
           </div>
           <button onClick={onNewChat} className="p-1 text-[#00a651] hover:scale-110 transition-transform"><Plus className="w-5 h-5" /></button>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto px-4 py-2 space-y-2">
           {sessions.map(s => (
-            <div 
-              key={s.id} 
-              onClick={() => { onSelectSession(s.id); if(window.innerWidth <= 1024) setIsSidebarOpen(false); }}
+            <div
+              key={s.id}
+              onClick={() => { onSelectSession(s.id); if (window.innerWidth <= 1024) setIsSidebarOpen(false); }}
               className={`p-4 rounded-xl border transition-all group cursor-pointer ${currentSessionId === s.id ? (isDark ? 'bg-[#00a651]/10 border-[#00a651]' : 'bg-green-50 border-green-500 shadow-sm') : 'border-transparent hover:bg-white/5'}`}
             >
               <div className="flex justify-between items-start">
@@ -221,19 +229,17 @@ CORE PROTOCOLS:
           {messages.map((msg) => (
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-500`}>
               <div className={`flex max-w-[95%] lg:max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'} items-start gap-4`}>
-                <div className={`w-9 h-9 lg:w-11 lg:h-11 rounded-xl flex-shrink-0 flex items-center justify-center shadow-lg transform transition-all hover:scale-105 ${
-                  msg.role === 'user' 
-                    ? 'bg-[#00ff66] shadow-[0_0_15px_rgba(0,255,102,0.3)]' 
+                <div className={`w-9 h-9 lg:w-11 lg:h-11 rounded-xl flex-shrink-0 flex items-center justify-center shadow-lg transform transition-all hover:scale-105 ${msg.role === 'user'
+                    ? 'bg-[#00ff66] shadow-[0_0_15px_rgba(0,255,102,0.3)]'
                     : (isDark ? 'bg-zinc-900 border border-zinc-800' : 'bg-zinc-200')
-                }`}>
+                  }`}>
                   {msg.role === 'user' ? <User className="w-5 h-5 text-black" /> : <Bot className={`w-5 h-5 ${isDark ? 'text-[#00ff66]' : 'text-[#00a651]'}`} />}
                 </div>
                 <div className={`flex flex-col gap-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                  <div className={`px-6 py-5 rounded-3xl relative border transition-all shadow-xl ${
-                    msg.role === 'user' 
+                  <div className={`px-6 py-5 rounded-3xl relative border transition-all shadow-xl ${msg.role === 'user'
                       ? (isDark ? 'bg-gradient-to-br from-[#004d2a] to-[#002b16] border-[#00a651]/30 text-white' : 'bg-gradient-to-br from-green-100 to-green-50 border-green-200 text-green-900') + ' rounded-tr-none'
                       : (isDark ? 'bg-[#111] border-white/5 text-white' : 'bg-white border-zinc-200 text-zinc-900 shadow-sm') + ' rounded-tl-none'
-                  }`}>
+                    }`}>
                     {msg.imageUrl && (
                       <div className="rounded-xl overflow-hidden mb-4 border border-white/10 shadow-2xl max-w-full">
                         <img src={msg.imageUrl} className="w-full h-auto object-contain max-h-[400px]" alt="user input" />
@@ -246,15 +252,15 @@ CORE PROTOCOLS:
                       <span className="text-[9px] font-black opacity-30 uppercase tracking-widest">{formatTime(msg.timestamp)}</span>
                       {msg.role === 'assistant' && (
                         <button onClick={async () => {
-                           const audio = await generateSpeech(msg.content);
-                           if (!audio) return;
-                           if (!audioContextRef.current) audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
-                           const ctx = audioContextRef.current;
-                           const buffer = await decodeAudioData(decode(audio), ctx, 24000, 1);
-                           const source = ctx.createBufferSource();
-                           source.buffer = buffer;
-                           source.connect(ctx.destination);
-                           source.start(0);
+                          const audio = await generateSpeech(msg.content);
+                          if (!audio) return;
+                          if (!audioContextRef.current) audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
+                          const ctx = audioContextRef.current;
+                          const buffer = await decodeAudioData(decode(audio), ctx, 24000, 1);
+                          const source = ctx.createBufferSource();
+                          source.buffer = buffer;
+                          source.connect(ctx.destination);
+                          source.start(0);
                         }} className={`p-1 transition-all text-zinc-600 hover:text-[#00ff66]`}>
                           <Volume2 className="w-4 h-4" />
                         </button>
@@ -286,16 +292,16 @@ CORE PROTOCOLS:
               </button>
             </div>
           )}
-          
+
           <div className={`flex items-center gap-2 p-2.5 lg:p-4 rounded-2xl border transition-all duration-300 ${isDark ? 'bg-black/50 border-zinc-800 focus-within:border-[#00a651] focus-within:bg-black' : 'bg-zinc-50 border-zinc-200 focus-within:bg-white focus-within:border-[#00a651] shadow-sm'}`}>
             <div className="flex items-center space-x-1 lg:space-x-2 mr-1">
-              <button 
+              <button
                 onMouseDown={startRecording} onMouseUp={() => mediaRecorderRef.current?.stop()}
                 className={`p-2.5 rounded-xl transition-all ${isRecording ? 'bg-red-500 text-white animate-pulse shadow-lg' : 'text-zinc-500 hover:text-[#00ff66] hover:bg-white/5'}`}
               >
                 <Mic className="w-5 h-5" />
               </button>
-              
+
               <button onClick={() => fileInputRef.current?.click()} className="p-2.5 rounded-xl text-zinc-500 hover:text-[#00ff66] hover:bg-white/5 transition-all">
                 <ImageIcon className="w-5 h-5" />
               </button>
@@ -308,32 +314,32 @@ CORE PROTOCOLS:
                 }
               }} accept="image/*" className="hidden" />
             </div>
-            
-            <input 
+
+            <input
               type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="Query ICT Bangladesh..." 
+              placeholder="Query ICT Bangladesh..."
               className={`flex-1 bg-transparent px-2 py-2 text-[14px] lg:text-[15px] border-none outline-none font-bold placeholder:text-zinc-800 ${isDark ? 'text-white' : 'text-zinc-900'}`}
             />
-            
-            <button 
-              onClick={handleSend} 
-              disabled={isLoading || (!input.trim() && !selectedImage)} 
+
+            <button
+              onClick={handleSend}
+              disabled={isLoading || (!input.trim() && !selectedImage)}
               className={`w-10 h-10 lg:w-12 lg:h-12 flex-shrink-0 flex items-center justify-center rounded-2xl transition-all ${isLoading || (!input.trim() && !selectedImage) ? 'bg-zinc-900 text-zinc-800 opacity-40 cursor-not-allowed' : 'bg-[#00a651] text-white shadow-[0_4px_15px_rgba(0,166,81,0.3)] hover:bg-[#00c851] active:scale-95'}`}
             >
               <Send className="w-5 h-5" />
             </button>
           </div>
-          
+
           <div className="flex justify-between items-center mt-6 px-2">
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2 text-zinc-600 opacity-60">
-                 <Zap className="w-3.5 h-3.5" />
-                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">GEMINI 3.0</span>
+                <Zap className="w-3.5 h-3.5" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">GEMINI 3.0</span>
               </div>
             </div>
             <div className="flex items-center space-x-2 text-zinc-700 opacity-60">
-               <span className="text-[10px] font-black uppercase tracking-[0.2em]">SECURE</span>
-               <ShieldCheck className="w-3.5 h-3.5" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em]">SECURE</span>
+              <ShieldCheck className="w-3.5 h-3.5" />
             </div>
           </div>
         </div>
