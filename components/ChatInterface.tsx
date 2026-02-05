@@ -372,7 +372,7 @@ Contact: +880 1753-060119
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2 text-zinc-600 opacity-60">
                 <Zap className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em]">GEMINI 1.5 PRO (v2.0)</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">GEMINI 1.5 FLASH (v2.5)</span>
               </div>
             </div>
             <div className="flex items-center space-x-2 text-zinc-700 opacity-60">

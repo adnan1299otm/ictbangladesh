@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,16 +15,20 @@
             overflow-x: hidden;
             transition: background-color 0.5s ease, color 0.5s ease;
         }
+
         .dot-grid {
             background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
             background-size: 30px 30px;
         }
+
         .dark .dot-grid {
             color: rgba(255, 255, 255, 0.05);
         }
+
         .light .dot-grid {
             color: rgba(0, 0, 0, 0.05);
         }
+
         canvas#fluid {
             position: fixed;
             top: 0;
@@ -34,16 +38,18 @@
             pointer-events: none;
             z-index: 1;
         }
+
         * {
             scrollbar-width: thin;
             scrollbar-color: rgba(0, 166, 81, 0.2) transparent;
         }
+
         /* Custom Bold Fix */
         .prose strong {
             font-weight: 800;
         }
     </style>
-<script type="importmap">
+    <script type="importmap">
 {
   "imports": {
     "react/": "https://esm.sh/react@^19.2.4/",
@@ -54,10 +60,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+
 </head>
+
 <body class="bg-black text-white">
     <div id="root"></div>
-<script type="module" src="/index.tsx"></script>
+    <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

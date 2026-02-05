@@ -23,13 +23,13 @@ export const generateAIResponse = async (
   imageData?: { data: string; mimeType: string }
 ): Promise<AIResponse> => {
   // Use gemini-2.5-flash for high-quality responses and speed
-  // Use gemini-1.5-pro for better instruction following and reasoning
-  const modelName = 'gemini-1.5-pro';
+  // Use gemini-1.5-flash for broad compatibility and speed
+  const modelName = 'gemini-1.5-flash';
 
   const config: any = {
     systemInstruction,
-    temperature: 0.3, // Lower temperature for more consistent formatting
-    tools: [{ googleSearch: {} }],
+    temperature: 0.3,
+    // tools: [{ googleSearch: {} }], // Temporarily disabling search to verify basic connectivity if standard key fails
   };
 
   const userParts: any[] = [{ text: prompt }];
@@ -69,9 +69,9 @@ export const generateAIResponse = async (
       return { text: "System Error: API Key is missing. Please configure VITE_GEMINI_API_KEY in your Vercel settings." };
     }
     if (imageData) {
-      return { text: "দুঃখিত, এই মুহূর্তে ছবিটি বিশ্লেষণ করা সম্ভব হচ্ছে না। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।" };
+      return { text: "Sorry, I cannot analyze this image right now. Please try again later." };
     }
-    return { text: "দুঃখিত, প্রযুক্তিগত সমস্যার কারণে আমি তথ্যটি খুঁজে পাচ্ছি না। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন বা সরাসরি আমাদের সাপোর্ট টিমের সাথে যোগাযোগ করুন।" };
+    return { text: "Sorry, I am unable to process your request at the moment. Please try again later or contact our support hotline." };
   }
 };
 
